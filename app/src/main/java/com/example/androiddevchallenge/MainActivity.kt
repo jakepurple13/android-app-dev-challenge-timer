@@ -16,25 +16,22 @@
 package com.example.androiddevchallenge
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.ui.theme.MyTheme
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,32 +48,74 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
-        val time = remember { mutableStateOf(5) }
+        val time = remember { mutableStateOf(10) }
 
-        Box {
-            Column(Modifier.align(Alignment.Center)) {
+        val action = remember { mutableStateOf(false) }
 
-                Text(
-                    time.value.toString(),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+        val isFinished = remember { mutableStateOf(false) }
 
-                Button(onClick = { Timer(time) }) {
-                    Text("Start/Stop")
+        val c = remember {
+            object : CountDownTimer(10000L, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    if (time.value > 0) time.value -= 1
+                }
+
+                override fun onFinish() {
+                    isFinished.value = true
                 }
             }
         }
-    }
-}
 
-fun Timer(time: MutableState<Int>) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Column {
+                Text(
+                    time.value.toString(),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
 
-    time.value = 10
+                Button(
+                    onClick = {
+                        action.value = !action.value
+                        (if (action.value) c.start() else c.cancel())
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(if (!action.value) "Start" else "Stop")
+                }
 
-    GlobalScope.launch {
-        while (time.value > 0) {
-            delay(1000)
-            time.value -= 1
+                Button(
+                    onClick = {
+                        c.cancel()
+                        time.value = 10
+                        action.value = false
+                        isFinished.value = false
+                    },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Reset")
+                }
+
+                if (isFinished.value) {
+                    Text(
+                        text = "Yay!!!",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+            }
         }
     }
 }
