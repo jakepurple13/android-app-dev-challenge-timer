@@ -18,12 +18,23 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +51,33 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+        val time = remember { mutableStateOf(5) }
+
+        Box {
+            Column(Modifier.align(Alignment.Center)) {
+
+                Text(
+                    time.value.toString(),
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+
+                Button(onClick = { Timer(time) }) {
+                    Text("Start/Stop")
+                }
+            }
+        }
+    }
+}
+
+fun Timer(time: MutableState<Int>) {
+
+    time.value = 10
+
+    GlobalScope.launch {
+        while (time.value > 0) {
+            delay(1000)
+            time.value -= 1
+        }
     }
 }
 
