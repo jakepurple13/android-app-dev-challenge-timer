@@ -2,17 +2,17 @@
 
 <!--- Replace <OWNER> with your Github Username and <REPOSITORY> with the name of your repository. -->
 <!--- You can find both of these in the url bar when you open your repository in github. -->
-![Workflow result](https://github.com/fakepurple13/android-app-dev-challenge-timer/workflows/Check/badge.svg)
+![Workflow result](https://github.com/jakepurple13/android-app-dev-challenge-timer/workflows/Check/badge.svg)
 
 
 ## :scroll: Description
 <!--- Describe your app in one or two sentences -->
-
+A simple timer app that counts down from 10 to 0. All made using compose!
 
 ## :bulb: Motivation and Context
 <!--- Optionally point readers to interesting parts of your submission. -->
 <!--- What are you especially proud of? -->
-
+Android is issuing a challenge to make a timer app only using Jetpack Compose for the UI! Its something that seems cool and I want to learn it a lot more since the skills between Jetpack Compose and Desktop Compose are very similar if not the same. Its really cool to have some android elements, the countdown timer, integrated with compose and actually having it work as well as it is.
 
 ## :camera_flash: Screenshots
 <!-- You can add more screenshots here if you like -->
